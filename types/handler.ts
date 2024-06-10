@@ -37,6 +37,7 @@ export type HandlerConstructorConfig = {
   cacheRefreshCycles: number | null;
   runtimeRpcs: string[] | null;
   rpcTimeout: number | null;
+  excludeTrackingRPCs: boolean;
 };
 
 export type NetworkRPCs = typeof networkRpcs;

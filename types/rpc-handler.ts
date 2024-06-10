@@ -1,5 +1,6 @@
 import { JsonRpcProvider } from "@ethersproject/providers";
-import { LOCAL_HOST, networkRpcs, networkNames } from "./constants";
+// import { LOCAL_HOST, networkRpcs, networkNames } from "./constants";
+import { LOCAL_HOST, getNetworkRpcs, networkNames } from "./constants";
 import { HandlerInterface, HandlerConstructorConfig } from "./handler";
 
 import { RPCService } from "../src/services/rpc-service";
@@ -11,6 +12,7 @@ export class RPCHandler implements HandlerInterface {
   private _networkId: number;
   private _networkName: string;
   private _env: string = "node";
+  private _excludeTrackingRPCs: boolean = false;
 
   private _rpcTimeout: number = Number.MAX_SAFE_INTEGER; // ms
   private _cacheRefreshCycles: number = 10;
@@ -24,8 +26,9 @@ export class RPCHandler implements HandlerInterface {
 
   constructor(config: HandlerConstructorConfig) {
     this._networkId = config.networkId;
-    this._networkRpcs = networkRpcs[this._networkId];
     this._networkName = networkNames[this._networkId];
+    this._excludeTrackingRPCs = config.excludeTrackingRPCs;
+    this._networkRpcs = getNetworkRpcs(this._networkId, this._excludeTrackingRPCs);
     this._initialize(config);
   }
 

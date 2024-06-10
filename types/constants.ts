@@ -31,6 +31,24 @@ export const networkRpcs: Record<ChainId, string[]> = Object.fromEntries(
   })
 );
 
+export const getNetworkRpcs = (networkIds, excludeTrackingRPCs: boolean = false): Record<ChainId, string[]> => {
+  let extra = { ...extraRpcs.officialUrls, ...extra.extraUrlObject.map((rpc) => rpc.url) };
+  console.log(`🚀 ----------------------------------------------------------🚀`);
+  console.log(`🚀 ~ file: constants.ts:36 ~ getNetworkRpcs ~ extra:`, extra);
+  console.log(`🚀 ----------------------------------------------------------🚀`);
+
+  if (excludeTrackingRPCs) {
+    extra = { ...extra.officialUrls, ...extra.extraUrlObject.filter((rpc) => rpc.tracking === "none").map((rpc) => rpc.url) };
+  }
+
+  return Object.fromEntries(
+    Object.entries(networkIds).map(([, value]) => {
+      const chainRpcs = extra[value] || [];
+      return [value, chainRpcs];
+    })
+  );
+};
+
 export const tokens: Record<ChainId, Record<Token["symbol"], Token>> = {
   [networkIds.Mainnet]: {
     DAI: {
